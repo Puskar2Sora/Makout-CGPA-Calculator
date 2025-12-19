@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MAKAUT Academic Grade System</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body class="bg-slate-100">
+
+<header class="header">
+  <h1>MAKAUT Academic Grade System</h1>
+</header>
+
+<main class="container" id="app">
+
+  <!-- SEMESTER TABS -->
+  <section class="card">
+    <div id="semesterTabs" class="flex gap-2 flex-wrap"></div>
+  </section>
+
+  <!-- SUBJECT TABLE -->
+  <section class="card">
+    <h2 class="section-title">Subject Details</h2>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Credits</th>
+          <th>Grade</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="subjects"></tbody>
+    </table>
+
+    <button onclick="addSubject()" class="btn-primary mt-4">
+      + Add Subject / Lab
+    </button>
+  </section>
+
+  <!-- ACTION BUTTONS -->
+  <section class="card grid grid-cols-2 gap-4">
+    <button onclick="saveSemester()" class="btn-success">
+      Save Semester Result
+    </button>
+    <button onclick="generatePDF()" class="btn-secondary">
+      Download Grade Card PDF
+    </button>
+  </section>
+
+  <!-- RESULT -->
+  <section class="card hidden" id="result">
+    <h2 class="section-title">Semester Result</h2>
+
+    <div class="grid grid-cols-5 gap-4 text-center">
+      <div>
+        <p class="label">Total Credits</p>
+        <p id="totalCredits" class="value"></p>
+      </div>
+
+      <div>
+        <p class="label">Total Credit Points</p>
+        <p id="totalPoints" class="value"></p>
+      </div>
+
+      <div>
+        <p class="label">SGPA</p>
+        <p id="sgpa" class="value highlight"></p>
+      </div>
+
+      <div>
+        <p class="label">Percentage</p>
+        <p id="percentage" class="value"></p>
+      </div>
+
+      <div>
+        <p class="label">CGPA</p>
+        <p id="cgpa" class="value highlight"></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  © MAKAUT Academic Tool • Unofficial
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

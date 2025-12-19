@@ -1,0 +1,99 @@
+.header {
+  background: #1e40af;
+  color: white;
+  padding: 16px;
+  text-align: center;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 16px;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 14px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 6px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  background: #f8fafc;
+  padding: 10px;
+  font-weight: 600;
+}
+
+.table td {
+  padding: 8px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid #cbd5f5;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 6px;
+}
+
+.btn-success {
+  background: #047857;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.btn-secondary {
+  background: #334155;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.sem-tab {
+  padding: 8px 14px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.sem-tab.active {
+  background: #2563eb;
+  color: white;
+}
+
+.value {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.highlight {
+  color: #2563eb;
+}
+
+.footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 20px;
+}
