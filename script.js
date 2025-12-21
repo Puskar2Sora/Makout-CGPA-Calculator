@@ -5,6 +5,7 @@ let semesterData = {};
 
 initSemesters(8);
 
+/* ---------- SEMESTERS ---------- */
 function initSemesters(count) {
   const tabs = document.getElementById("semesterTabs");
   tabs.innerHTML = "";
@@ -27,16 +28,35 @@ function switchSemester(sem) {
   document.querySelectorAll(".sem-tab")
     .forEach((t,i)=>t.classList.toggle("active", i+1===sem));
 
-  document.getElementById("subjects").innerHTML =
-    semesterData[sem] || "";
+  const table = document.getElementById("subjects");
+  const mobile = document.getElementById("mobileSubjects");
 
-  if (!semesterData[sem]) addSubject();
+  table.classList.add("fade-enter");
+  mobile.classList.add("fade-enter");
+
+  setTimeout(() => {
+    table.innerHTML = semesterData[sem] || "";
+    mobile.innerHTML = "";
+
+    if (!semesterData[sem]) addSubject();
+
+    table.classList.remove("fade-enter");
+    table.classList.add("fade-active");
+    mobile.classList.remove("fade-enter");
+    mobile.classList.add("fade-active");
+
+    setTimeout(() => {
+      table.classList.remove("fade-active");
+      mobile.classList.remove("fade-active");
+    }, 250);
+  }, 150);
 }
 
+/* ---------- SUBJECTS ---------- */
 function addSubject() {
   const tr = document.createElement("tr");
   tr.innerHTML = `
-    <td><input class="input" placeholder="Subject or Lab name"></td>
+    <td><input class="input" placeholder="Subject / Lab name"></td>
     <td><input type="number" step="0.5" class="input" placeholder="Credits"></td>
     <td>
       <select class="input">
@@ -44,10 +64,26 @@ function addSubject() {
       </select>
     </td>
     <td>
-      <button onclick="this.closest('tr').remove()" class="text-red-600 font-bold">✕</button>
+      <button onclick="removeRow(this)" class="text-red-600 font-bold">✕</button>
     </td>
   `;
   document.getElementById("subjects").appendChild(tr);
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `
+    <input class="input mb-2" placeholder="Subject / Lab name">
+    <input type="number" step="0.5" class="input mb-2" placeholder="Credits">
+    <select class="input mb-2">
+      ${Object.keys(gradePoints).map(g=>`<option>${g}</option>`).join("")}
+    </select>
+    <button onclick="this.parentElement.remove()" class="text-red-600 text-sm">Remove</button>
+  `;
+  document.getElementById("mobileSubjects").appendChild(card);
+}
+
+function removeRow(btn) {
+  btn.closest("tr").remove();
 }
 
 function saveTable() {
@@ -55,13 +91,13 @@ function saveTable() {
     document.getElementById("subjects").innerHTML;
 }
 
+/* ---------- CALCULATION ---------- */
 function saveSemester() {
   let credits = 0, points = 0;
 
   document.querySelectorAll("#subjects tr").forEach(row => {
     const c = parseFloat(row.children[1].children[0].value);
     const g = row.children[2].children[0].value;
-
     if (!isNaN(c)) {
       credits += c;
       points += c * gradePoints[g];
@@ -69,7 +105,7 @@ function saveSemester() {
   });
 
   if (credits === 0) {
-    alert("Please enter subjects, credits, and grades.");
+    alert("Please enter subjects and credits.");
     return;
   }
 
@@ -86,11 +122,27 @@ function saveSemester() {
   document.getElementById("result").classList.remove("hidden");
 }
 
+/* ---------- PDF ---------- */
 function generatePDF() {
   const { jsPDF } = window.jspdf;
   html2canvas(document.getElementById("app")).then(canvas => {
-    const pdf = new jsPDF("p", "mm", "a4");
+    const pdf = new jsPDF("p","mm","a4");
     pdf.addImage(canvas.toDataURL("image/png"), "PNG", 10, 10, 190, 0);
-    pdf.save("MAKAUT_Semester_Grade_Card.pdf");
+    pdf.save("MAKAUT_Grade_Card.pdf");
   });
 }
+
+/* ---------- THEME ---------- */
+function toggleTheme() {
+  document.documentElement.classList.toggle("dark");
+  localStorage.setItem(
+    "theme",
+    document.documentElement.classList.contains("dark") ? "dark" : "light"
+  );
+}
+
+(function(){
+  if (localStorage.getItem("theme") === "dark") {
+    document.documentElement.classList.add("dark");
+  }
+})();

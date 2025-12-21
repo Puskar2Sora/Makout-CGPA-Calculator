@@ -4,25 +4,36 @@
   <meta charset="UTF-8" />
   <title>MAKAUT Grade Calculator</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css">
 
+  <!-- PDF libs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body class="bg-slate-100 text-slate-800">
 
-<header class="header">
+<!-- HEADER -->
+<header class="header flex justify-between items-center">
   <div>
     <h1>MAKAUT Academic Grade Calculator</h1>
     <p>Semester-wise SGPA, CGPA & Percentage</p>
   </div>
+
+  <button onclick="toggleTheme()" class="theme-btn" title="Toggle dark mode">
+    🌙
+  </button>
 </header>
 
 <main class="container" id="app">
 
-  <!-- SEMESTER NAV -->
+  <!-- SEMESTER SELECTION -->
   <section class="card">
     <h2 class="section-title">Semester Selection</h2>
     <div id="semesterTabs" class="flex flex-wrap gap-2 mt-2"></div>
@@ -32,28 +43,32 @@
   <section class="card">
     <h2 class="section-title">Subjects & Labs</h2>
 
-    <table class="table">
+    <!-- Desktop / Tablet Table -->
+    <table class="table hidden sm:table">
       <thead>
         <tr>
-          <th style="width:40%">Subject / Lab Name</th>
-          <th style="width:20%">Credits</th>
-          <th style="width:20%">Grade</th>
-          <th style="width:20%"></th>
+          <th>Subject / Lab Name</th>
+          <th>Credits</th>
+          <th>Grade</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="subjects"></tbody>
     </table>
 
-    <div class="flex justify-between mt-4">
+    <!-- Mobile Cards -->
+    <div id="mobileSubjects" class="space-y-3 sm:hidden"></div>
+
+    <div class="flex justify-between items-center mt-4 flex-wrap gap-2">
       <button onclick="addSubject()" class="btn-primary">
         + Add Subject / Lab
       </button>
-      <span class="note">Enter all theory & lab subjects for accurate SGPA</span>
+      <span class="note">Enter all theory & lab subjects</span>
     </div>
   </section>
 
-  <!-- ACTIONS -->
-  <section class="card grid grid-cols-2 gap-4">
+  <!-- ACTION BUTTONS (DESKTOP) -->
+  <section class="card hidden sm:grid grid-cols-2 gap-4">
     <button onclick="saveSemester()" class="btn-success">
       Calculate & Save Semester
     </button>
@@ -66,7 +81,7 @@
   <section class="card hidden" id="result">
     <h2 class="section-title">Semester Result Summary</h2>
 
-    <div class="grid grid-cols-5 gap-4 text-center">
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 text-center">
       <div class="stat">
         <p>Total Credits</p>
         <span id="totalCredits"></span>
@@ -96,8 +111,18 @@
 
 </main>
 
+<!-- STICKY ACTION BAR (MOBILE) -->
+<div class="sticky-bar sm:hidden">
+  <button onclick="saveSemester()" class="btn-success w-1/2">
+    Save
+  </button>
+  <button onclick="generatePDF()" class="btn-secondary w-1/2">
+    PDF
+  </button>
+</div>
+
 <footer class="footer">
-  <p>Unofficial Academic Tool • Built for MAKAUT Students</p>
+  Unofficial Academic Tool • Built for MAKAUT Students
 </footer>
 
 <script src="script.js"></script>

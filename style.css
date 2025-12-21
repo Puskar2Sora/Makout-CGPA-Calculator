@@ -1,24 +1,25 @@
+/* HEADER */
 .header {
   background: linear-gradient(135deg, #1e3a8a, #1e40af);
   color: white;
-  padding: 26px;
-  text-align: center;
+  padding: 22px;
 }
 
 .header h1 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
 .header p {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   opacity: 0.9;
 }
 
+/* LAYOUT */
 .container {
   max-width: 1150px;
-  margin: 32px auto;
-  padding: 0 18px;
+  margin: 30px auto;
+  padding: 0 16px;
 }
 
 .card {
@@ -37,6 +38,7 @@
   padding-bottom: 6px;
 }
 
+/* TABLE */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -46,7 +48,6 @@
   background: #f1f5f9;
   padding: 12px;
   text-align: left;
-  font-weight: 600;
 }
 
 .table td {
@@ -54,6 +55,7 @@
   border-top: 1px solid #e5e7eb;
 }
 
+/* INPUTS */
 .input {
   width: 100%;
   padding: 9px;
@@ -61,19 +63,7 @@
   border: 1px solid #cbd5f5;
 }
 
-.sem-tab {
-  padding: 9px 16px;
-  border-radius: 20px;
-  background: #e5e7eb;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.sem-tab.active {
-  background: #1d4ed8;
-  color: white;
-}
-
+/* BUTTONS */
 .btn-primary {
   background: #2563eb;
   color: white;
@@ -95,6 +85,21 @@
   border-radius: 8px;
 }
 
+/* SEMESTER TABS */
+.sem-tab {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #e5e7eb;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.sem-tab.active {
+  background: #1d4ed8;
+  color: white;
+}
+
+/* RESULT STATS */
 .stat {
   background: #f8fafc;
   border-radius: 10px;
@@ -115,15 +120,89 @@
   color: #1d4ed8;
 }
 
-.note {
-  font-size: 0.8rem;
-  color: #64748b;
-  align-self: center;
+/* STICKY BAR */
+.sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  box-shadow: 0 -6px 18px rgba(0,0,0,0.15);
+  z-index: 50;
 }
 
+body {
+  padding-bottom: 80px;
+}
+
+/* FOOTER */
 .footer {
   text-align: center;
   font-size: 0.8rem;
   color: #64748b;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
+}
+
+/* NOTES */
+.note {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* THEME TOGGLE */
+.theme-btn {
+  font-size: 1.2rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.15);
+  color: white;
+}
+
+/* ANIMATION */
+.fade-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.fade-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.25s ease;
+}
+
+/* DARK MODE */
+.dark body {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+.dark .card,
+.dark .sticky-bar {
+  background: #020617;
+  color: #e5e7eb;
+}
+
+.dark .table th {
+  background: #020617;
+}
+
+.dark .table td {
+  border-color: #1e293b;
+}
+
+.dark .input {
+  background: #020617;
+  color: white;
+  border-color: #334155;
+}
+
+.dark .stat {
+  background: #020617;
+}
+
+.dark .footer {
+  color: #94a3b8;
 }
