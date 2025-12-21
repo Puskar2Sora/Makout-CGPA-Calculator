@@ -206,3 +206,116 @@ body {
 .dark .footer {
   color: #94a3b8;
 }
+
+/* =========================
+   RED DINGO THEME TOGGLE
+========================= */
+.theme-switch {
+  position: relative;
+  width: 52px;
+  height: 28px;
+}
+
+.theme-switch input {
+  display: none;@media (max-width: 640px) {
+    .card {
+      padding: 5px;
+      border-radius: 16px;
+    }
+  
+    .section-title {
+      font-size: 0.95rem;
+    }
+  }
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #334155;
+  border-radius: 999px;
+  transition: 0.3s ease;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.theme-switch input:checked + .slider {
+  background: #22c55e;
+}
+
+.theme-switch input:checked + .slider::before {
+  transform: translateX(24px);
+}
+
+/* =========================
+   DARK THEME
+========================= */
+.dark body {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+.dark .header {
+  background: linear-gradient(135deg, #020617, #020617);
+}
+
+.dark .card {
+  background: #020617;
+  color: #e5e7eb;
+}
+
+.dark .table th {
+  background: #020617;
+}
+
+.dark .table td {
+  border-color: #1e293b;
+}
+
+.dark .input {
+  background: #020617;
+  color: white;
+  border-color: #334155;
+}
+
+.dark .stat {
+  background: #020617;
+}
+
+.dark .sticky-bar {
+  background: #020617;
+}
+
+.dark .footer,
+.dark .note {
+  color: #94a3b8;
+}
+
+/* Semester tabs – mobile grid fix */
+@media (max-width: 640px) {
+  #semesterTabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .sem-tab {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 0.85rem;
+    border-radius: 999px;
+  }
+}

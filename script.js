@@ -125,12 +125,107 @@ function saveSemester() {
 /* ---------- PDF ---------- */
 function generatePDF() {
   const { jsPDF } = window.jspdf;
-  html2canvas(document.getElementById("app")).then(canvas => {
-    const pdf = new jsPDF("p","mm","a4");
-    pdf.addImage(canvas.toDataURL("image/png"), "PNG", 10, 10, 190, 0);
-    pdf.save("MAKAUT_Grade_Card.pdf");
+  const doc = new jsPDF("p", "mm", "a4");
+
+  // ===== HEADER =====
+  doc.setFont("times", "bold");
+  doc.setFontSize(14);
+  doc.text("MAULANA ABUL KALAM AZAD UNIVERSITY OF TECHNOLOGY", 105, 18, { align: "center" });
+
+  doc.setFontSize(11);
+  doc.text("WEST BENGAL", 105, 25, { align: "center" });
+  doc.text("GRADE CARD", 105, 32, { align: "center" });
+
+  doc.line(20, 36, 190, 36);
+
+  // ===== STUDENT DETAILS =====
+  doc.setFont("times", "normal");
+  doc.setFontSize(10);
+
+  const studentName = document.getElementById("studentName").value || "-";
+  const rollNo = document.getElementById("rollNo").value || "-";
+  const regNo = document.getElementById("regNo").value || "-";
+  const college = document.getElementById("college").value || "-";
+  const branch = document.getElementById("branch").value || "-";
+
+  let y = 44;
+  doc.text(`Name of the Student : ${studentName}`, 20, y);
+  doc.text(`Roll No : ${rollNo}`, 120, y);
+
+  y += 7;
+  doc.text(`Registration No : ${regNo}`, 20, y);
+  doc.text(`Branch : ${branch}`, 120, y);
+
+  y += 7;
+  doc.text(`College / Institution : ${college}`, 20, y);
+
+  y += 10;
+
+  // ===== SUBJECT TABLE =====
+  const tableBody = [];
+  let totalCredits = 0;
+  let totalPoints = 0;
+
+  document.querySelectorAll("#subjects tr").forEach((row, i) => {
+    const subject = row.children[0].children[0].value || "-";
+    const credit = parseFloat(row.children[1].children[0].value) || 0;
+    const grade = row.children[2].children[0].value;
+    const gp = gradePoints[grade];
+    const creditPoint = credit * gp;
+
+    totalCredits += credit;
+    totalPoints += creditPoint;
+
+    tableBody.push([
+      i + 1,
+      subject,
+      credit.toString(),
+      grade,
+      creditPoint.toFixed(1)
+    ]);
   });
+
+  doc.autoTable({
+    startY: y,
+    head: [["Sl No", "Subject", "Credits", "Grade", "Credit Points"]],
+    body: tableBody,
+    styles: { font: "times", fontSize: 10 },
+    headStyles: { fillColor: [230, 230, 230], textColor: 0 },
+    columnStyles: {
+      0: { cellWidth: 15 },
+      1: { cellWidth: 75 },
+      2: { cellWidth: 20 },
+      3: { cellWidth: 20 },
+      4: { cellWidth: 30 }
+    }
+  });
+
+  y = doc.lastAutoTable.finalY + 10;
+
+  // ===== RESULT SUMMARY =====
+  const sgpa = (totalPoints / totalCredits).toFixed(2);
+  const percentage = (sgpa * 9.5).toFixed(2);
+
+  doc.setFont("times", "bold");
+  doc.text(`Total Credits : ${totalCredits}`, 20, y);
+  doc.text(`Total Credit Points : ${totalPoints.toFixed(1)}`, 120, y);
+
+  y += 8;
+  doc.text(`SGPA : ${sgpa}`, 20, y);
+  doc.text(`Percentage : ${percentage}%`, 120, y);
+
+  y += 8;
+  doc.text(`Result : PASS`, 20, y);
+
+  // ===== FOOTER =====
+  y += 20;
+  doc.setFont("times", "normal");
+  doc.text("Date : ____________________", 20, y);
+  doc.text("Controller of Examinations", 120, y);
+
+  doc.save("MAKAUT_Grade_Card.pdf");
 }
+
 
 /* ---------- THEME ---------- */
 function toggleTheme() {
@@ -146,3 +241,29 @@ function toggleTheme() {
     document.documentElement.classList.add("dark");
   }
 })();
+
+/* =========================
+   DARK / LIGHT MODE LOGIC
+========================= */
+
+const toggle = document.getElementById("themeToggle");
+
+// Load saved theme
+(function () {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    document.documentElement.classList.add("dark");
+    toggle.checked = true;
+  }
+})();
+
+// Toggle handler
+toggle.addEventListener("change", () => {
+  if (toggle.checked) {
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  }
+});
