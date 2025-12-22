@@ -89,14 +89,15 @@
 .sem-tab {
   padding: 8px 14px;
   border-radius: 20px;
-  background: black
+  background: #e5e7eb;
   cursor: pointer;
   font-size: 0.85rem;
 }
 
 .sem-tab.active {
   background: #1d4ed8;
-  color: black;
+  color: black
+;
 }
 
 /* RESULT STATS */
