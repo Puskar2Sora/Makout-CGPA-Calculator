@@ -34,7 +34,7 @@
   font-size: 1.05rem;
   font-weight: 600;
   margin-bottom: 14px;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid black;
   padding-bottom: 6px;
 }
 
@@ -89,14 +89,14 @@
 .sem-tab {
   padding: 8px 14px;
   border-radius: 20px;
-  background: #e5e7eb;
+  background: black
   cursor: pointer;
   font-size: 0.85rem;
 }
 
 .sem-tab.active {
   background: #1d4ed8;
-  color: white;
+  color: black;
 }
 
 /* RESULT STATS */
