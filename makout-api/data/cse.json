@@ -1,0 +1,25 @@
+{
+  "stream": "CSE",
+  "regulations": {
+    "2020": {
+      "1": [
+        { "code": "BS-M101", "name": "Mathematics IA", "credit": 4 },
+        { "code": "BS-PH102", "name": "Physics-I", "credit": 4 },
+        { "code": "ES-EE101", "name": "Basic Electrical Engeneering", "credit": 4 },
+        { "code": "BS-PH191", "name": "Physics-I Laboratory", "credit": 1.5 },
+        { "code": "ES-EE191", "name": "Basic Electrical Engeneering Lab", "credit": 1 },
+        { "code": "ES-ME192", "name": "Workshop", "credit": 3 }
+      ],
+      "2": [
+        { "code": "BS-M201", "name": "Mathematics-IIA", "credit": 4 },
+        { "code": "BS-CH201", "name": "Chemistry-I", "credit": 4 },
+        { "code": "ES-CS201", "name": "Programming For Problem Solving", "credit": 3 },
+        { "code": "HM-HU201", "name": "English", "credit": 1 },
+        { "code": "BS-CH291", "name": "Chemistry-I Laboratory", "credit": 1 },
+        { "code": "ES-CS291", "name": "Programming For Problem Solving Lab", "credit": 1 },
+        { "code": "ES-ME291", "name": "Engeneering Graphics & Design", "credit": 1 },
+        { "code": "HM-HU291", "name": "Language Laboratory", "credit": 1 }
+      ]
+    }
+  }
+}
