@@ -1,3 +1,6 @@
+let apiSemesterCache = {}; 
+const API_BASE_URL = "https://makout-api.onrender.com";
+
 /* =========================
    MAKAUT GRADE POINT MAP
 ========================= */
@@ -25,7 +28,6 @@ function initSemesters(count) {
     tabs.appendChild(tab);
   }
 
-  loadSemester(currentSemester);
 }
 
 /* =========================
@@ -46,17 +48,30 @@ function switchSemester(sem) {
 ========================= */
 function loadSemester(sem) {
   const table = document.getElementById("subjects");
-  const mobile = document.getElementById("mobileSubjects");
-
   table.innerHTML = "";
-  mobile.innerHTML = "";
 
-  if (!semesterData[sem] || semesterData[sem].subjects.length === 0) {
-    addSubject();
+  // 1️⃣ If user already edited this semester → use stored data
+  if (semesterData[sem]?.subjects?.length) {
+    semesterData[sem].subjects.forEach(addSubjectFromData);
     return;
   }
 
-  semesterData[sem].subjects.forEach(addSubjectFromData);
+  // 2️⃣ Else use cached API data
+  if (apiSemesterCache[sem]) {
+    apiSemesterCache[sem].forEach(s => {
+      addSubjectFromData({
+        name: s.name,
+        credit: s.credit,
+        grade: "O"
+      });
+    });
+    autoSaveCurrentSemester();
+ // save immediately
+    return;
+  }
+
+  // 3️⃣ Fallback
+  addSubject();
 }
 
 /* =========================
@@ -175,4 +190,36 @@ function calculateAndDisplay() {
   }
 
   document.getElementById("result").classList.remove("hidden");
+}
+
+
+
+async function loadStreamData() {
+  const stream = document.getElementById("streamSelect").value;
+  if (!stream) return;
+
+  // Reset previous data
+  apiSemesterCache = {};
+  semesterData = {};
+  sessionStorage.removeItem("semesterData");
+
+  // Optional: clear UI
+  document.getElementById("subjects").innerHTML = "";
+
+  for (let sem = 1; sem <= 8; sem++) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/subjects?stream=${stream}&semester=${sem}`);
+      const data = await res.json();
+
+      if (data.subjects) {
+        apiSemesterCache[sem] = data.subjects;
+      }
+    } catch (err) {
+      console.warn(`No data for semester ${sem}`);
+    }
+  }
+
+  // Load Semester 1 by default
+  currentSemester = 1;
+  loadSemester(1);
 }
