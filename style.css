@@ -89,7 +89,7 @@
 .sem-tab {
   padding: 8px 14px;
   border-radius: 20px;
-  background: #e5e7eb;
+  background: #e5e7eb15;
   cursor: pointer;
   font-size: 0.85rem;
 }
@@ -175,10 +175,48 @@ body {
 }
 
 /* DARK MODE */
-.dark body {
+/* =========================
+   DARK MODE (FIXED)
+========================= */
+
+html.dark body {
   background: #0f172a;
   color: #e5e7eb;
 }
+
+html.dark .header {
+  background: linear-gradient(135deg, #020617, #020617);
+}
+
+html.dark .card,
+html.dark .sticky-bar {
+  background: #020617;
+  color: #e5e7eb;
+}
+
+html.dark .table th {
+  background: #020617;
+}
+
+html.dark .table td {
+  border-color: #1e293b;
+}
+
+html.dark .input {
+  background: #020617;
+  color: #ffffff;
+  border-color: #334155;
+}
+
+html.dark .stat {
+  background: #020617;
+}
+
+html.dark .footer,
+html.dark .note {
+  color: #94a3b8;
+}
+
 
 .dark .card,
 .dark .sticky-bar {

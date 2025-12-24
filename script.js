@@ -271,3 +271,30 @@ function addMobileSubject(data) {
   document.getElementById("mobileSubjects").appendChild(card);
 }
 
+/* =========================
+   BB-8 DARK / LIGHT MODE
+========================= */
+
+const themeToggle = document.getElementById("themeToggle");
+const root = document.documentElement;
+
+// Load saved theme
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+  root.classList.add("dark");
+  themeToggle.checked = true;
+}
+
+// Toggle theme
+themeToggle.addEventListener("change", () => {
+  if (themeToggle.checked) {
+    root.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  } else {
+    root.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  }
+});
+
+
