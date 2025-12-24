@@ -47,39 +47,49 @@ function switchSemester(sem) {
    LOAD SEMESTER
 ========================= */
 function loadSemester(sem) {
-  const table = document.getElementById("subjects");
-  table.innerHTML = "";
+  document.getElementById("subjects").innerHTML = "";
+  document.getElementById("mobileSubjects").innerHTML = "";
 
-  // 1️⃣ If user already edited this semester → use stored data
+  // 1️⃣ USER DATA HAS PRIORITY
   if (semesterData[sem]?.subjects?.length) {
-    semesterData[sem].subjects.forEach(addSubjectFromData);
-    return;
+    semesterData[sem].subjects.forEach(s => {
+      addSubjectFromData(s);
+      addMobileSubject(s);
+    });
+    return; // 🔥 STOP HERE
   }
 
-  // 2️⃣ Else use cached API data
+  // 2️⃣ ONLY USE API DATA IF NO USER DATA EXISTS
   if (apiSemesterCache[sem]) {
     apiSemesterCache[sem].forEach(s => {
-      addSubjectFromData({
-        name: s.name,
-        credit: s.credit,
-        grade: "O"
-      });
+      const subject = { name: s.name, credit: s.credit, grade: "O" };
+      addSubjectFromData(subject);
+      addMobileSubject(subject);
     });
+
+    // Save API data ONCE so it becomes user data
     autoSaveCurrentSemester();
- // save immediately
     return;
   }
 
-  // 3️⃣ Fallback
+  // 3️⃣ EMPTY SEMESTER
   addSubject();
 }
+
 
 /* =========================
    SUBJECT UI
 ========================= */
 function addSubject() {
-  const tr = createSubjectRow({ name:"", credit:"", grade:"O" });
-  document.getElementById("subjects").appendChild(tr);
+  const isMobile = window.innerWidth < 640;
+
+  if (isMobile) {
+    addMobileSubject({ name: "", credit: "", grade: "O" });
+  } else {
+    const tr = createSubjectRow({ name:"", credit:"", grade:"O" });
+    document.getElementById("subjects").appendChild(tr);
+  }
+
   autoSaveCurrentSemester();
 }
 
@@ -87,6 +97,7 @@ function addSubjectFromData(s) {
   const tr = createSubjectRow(s);
   document.getElementById("subjects").appendChild(tr);
 }
+
 
 function createSubjectRow(data) {
   const tr = document.createElement("tr");
@@ -128,10 +139,16 @@ function autoSaveCurrentSemester() {
   let totalCredits = 0;
   let totalPoints = 0;
 
-  document.querySelectorAll("#subjects tr").forEach(row => {
-    const name = row.children[0].children[0].value.trim();
-    const credit = parseFloat(row.children[1].children[0].value);
-    const grade = row.children[2].children[0].value;
+  const isMobile = window.innerWidth < 640;
+  const rows = isMobile
+    ? document.querySelectorAll("#mobileSubjects .card")
+    : document.querySelectorAll("#subjects tr");
+
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll("input, select");
+    const name = inputs[0].value.trim();
+    const credit = parseFloat(inputs[1].value);
+    const grade = inputs[2].value;
 
     if (!isNaN(credit) && credit > 0) {
       totalCredits += credit;
@@ -223,3 +240,34 @@ async function loadStreamData() {
   currentSemester = 1;
   loadSemester(1);
 }
+
+function addMobileSubject(data) {
+  const card = document.createElement("div");
+  card.className = "card border";
+
+  card.innerHTML = `
+    <input class="input mb-2" placeholder="Subject / Lab"
+      value="${data.name || ""}">
+    <input type="number" step="0.5" class="input mb-2"
+      placeholder="Credits" value="${data.credit || ""}">
+    <select class="input mb-2">
+      ${Object.keys(gradePoints)
+        .map(g => `<option ${g===data.grade?"selected":""}>${g}</option>`)
+        .join("")}
+    </select>
+    <button class="text-red-600 text-sm">Remove</button>
+  `;
+
+  card.querySelectorAll("input, select").forEach(el => {
+    el.addEventListener("input", autoSaveCurrentSemester);
+    el.addEventListener("change", autoSaveCurrentSemester);
+  });
+
+  card.querySelector("button").onclick = () => {
+    card.remove();
+    autoSaveCurrentSemester();
+  };
+
+  document.getElementById("mobileSubjects").appendChild(card);
+}
+
