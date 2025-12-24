@@ -1,3 +1,7 @@
+// 🔥 wake server ASAP
+fetch("https://makout-api.onrender.com")
+  .catch(() => {});
+
 let apiSemesterCache = {}; 
 const API_BASE_URL = "https://makout-api.onrender.com";
 
@@ -209,37 +213,49 @@ function calculateAndDisplay() {
   document.getElementById("result").classList.remove("hidden");
 }
 
-
-
 async function loadStreamData() {
   const stream = document.getElementById("streamSelect").value;
   if (!stream) return;
 
-  // Reset previous data
   apiSemesterCache = {};
   semesterData = {};
   sessionStorage.removeItem("semesterData");
 
-  // Optional: clear UI
   document.getElementById("subjects").innerHTML = "";
+  document.getElementById("mobileSubjects").innerHTML = "";
 
-  for (let sem = 1; sem <= 8; sem++) {
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/subjects?stream=${stream}&semester=${sem}`);
-      const data = await res.json();
+  // 🔥 1️⃣ Load SEMESTER 1 FIRST
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/api/subjects?stream=${stream}&semester=1`
+    );
+    const data = await res.json();
 
-      if (data.subjects) {
-        apiSemesterCache[sem] = data.subjects;
-      }
-    } catch (err) {
-      console.warn(`No data for semester ${sem}`);
+    if (data.subjects) {
+      apiSemesterCache[1] = data.subjects;
     }
+  } catch {
+    console.warn("Semester 1 failed");
   }
 
-  // Load Semester 1 by default
-  currentSemester = 1;
-  loadSemester(1);
+  // ✅ show sem 1 immediately
+  switchSemester(1);
+
+  // 🔄 2️⃣ Load remaining semesters in background
+  for (let sem = 2; sem <= 8; sem++) {
+    fetch(`${API_BASE_URL}/api/subjects?stream=${stream}&semester=${sem}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.subjects) {
+          apiSemesterCache[sem] = data.subjects;
+        }
+      })
+      .catch(() => {
+        console.warn(`Semester ${sem} failed`);
+      });
+  }
 }
+
 
 function addMobileSubject(data) {
   const card = document.createElement("div");
