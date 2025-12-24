@@ -366,7 +366,7 @@ html.dark .note {
 /* completely redone toggle and droid */
 
 .bb8-toggle {
-  --toggle-size: 12px;
+  --toggle-size: 10px;
   /* finally I removed the scale now everything depends on the font-size */
   /* --margin-top-for-head: 1.75em; */
   /* it's just in case 👆 */
