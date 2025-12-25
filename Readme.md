@@ -76,8 +76,6 @@ Built **by a MAKAUT student, for MAKAUT students**.
 
 ---
 
-## 📐 Calculation Logic
-
 ### 🔹 Credit Point
 
 ---
