@@ -1,3 +1,8 @@
+const loader = document.getElementById("apiLoader");
+const showLoader = () => loader.classList.remove("hidden");
+const hideLoader = () => loader.classList.add("hidden");
+
+
 // 🔥 wake server ASAP
 fetch("https://makout-api.onrender.com")
   .catch(() => {});
@@ -214,6 +219,8 @@ function calculateAndDisplay() {
 }
 
 async function loadStreamData() {
+  showLoader();   // 👈 ADD THIS LINE
+
   const stream = document.getElementById("streamSelect").value;
   if (!stream) return;
 
@@ -240,12 +247,13 @@ async function loadStreamData() {
 
   // ✅ show sem 1 immediately
   switchSemester(1);
+  hideLoader(); 
 
   // 🔄 2️⃣ Load remaining semesters in background
   for (let sem = 2; sem <= 8; sem++) {
     fetch(`${API_BASE_URL}/api/subjects?stream=${stream}&semester=${sem}`)
       .then(res => res.json())
-      .then(data => {
+      .then(data => { 
         if (data.subjects) {
           apiSemesterCache[sem] = data.subjects;
         }
