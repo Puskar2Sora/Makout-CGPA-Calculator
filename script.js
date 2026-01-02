@@ -1,6 +1,12 @@
-const loader = document.getElementById("apiLoader");
-const showLoader = () => loader.classList.remove("hidden");
-const hideLoader = () => loader.classList.add("hidden");
+const apiLoader = document.getElementById("apiLoader");
+
+function showLoader() {
+  apiLoader.classList.remove("hidden");
+}
+
+function hideLoader() {
+  apiLoader.classList.add("hidden");
+}
 
 
 // 🔥 wake server ASAP
