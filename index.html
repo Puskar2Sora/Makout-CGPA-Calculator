@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MAKAUT Grade Calculator</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- PDF libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body class="bg-slate-100 text-slate-800">
+<!-- From Uiverse.io by raunak_2064 --> 
+<!-- API LOADER -->
+<div id="apiLoader" class="api-loader hidden">
+  <div class="loader-container">
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+  </div>
+</div>
+
+
+<!-- HEADER -->
+<header class="header flex justify-between items-center">
+  <div>
+    <h1>MAKAUT Academic Grade Calculator</h1>
+    <p>Semester-wise SGPA, CGPA & Percentage</p>
+  </div>
+
+  <!-- Dark / Light Toggle -->
+<!-- From Uiverse.io by Galahhad --> 
+<label class="bb8-toggle">
+      <input class="bb8-toggle__checkbox" type="checkbox" id="themeToggle">
+      <div class="bb8-toggle__container">
+        <div class="bb8-toggle__scenery">
+          <div class="bb8-toggle__star"></div>
+          <div class="bb8-toggle__star"></div>
+          <div class="bb8-toggle__star"></div>
+          <div class="bb8-toggle__star"></div>
+          <div class="bb8-toggle__star"></div>
+          <div class="bb8-toggle__star"></div>
+          <div class="bb8-toggle__star"></div>
+          <div class="tatto-1"></div>
+          <div class="tatto-2"></div>
+          <div class="gomrassen"></div>
+          <div class="hermes"></div>
+          <div class="chenini"></div>
+          <div class="bb8-toggle__cloud"></div>
+          <div class="bb8-toggle__cloud"></div>
+          <div class="bb8-toggle__cloud"></div>
+        </div>
+        <div class="bb8">
+          <div class="bb8__head-container">
+            <div class="bb8__antenna"></div>
+            <div class="bb8__antenna"></div>
+            <div class="bb8__head"></div>
+          </div>
+          <div class="bb8__body"></div>
+        </div>
+        <div class="artificial__hidden">
+          <div class="bb8__shadow"></div>
+        </div>
+      </div>
+    </label>
+</header>
+
+<section class="card">
+  <h2 class="section-title">Student Details</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <input id="studentName" class="input" placeholder="Student Name">
+    <input id="rollNo" class="input" placeholder="Roll Number">
+    <input id="regNo" class="input" placeholder="Registration Number">
+    <input id="college" class="input sm:col-span-2" placeholder="College Name">
+    <input id="branch" class="input" placeholder="Branch (e.g. CSE)">
+  </div>
+</section>
+
+
+<main class="container" id="app">
+
+  <!-- STREAM SELECTION -->
+<section class="card">
+  <h2 class="section-title">Select Stream</h2>
+  <select id="streamSelect" class="input" onchange="loadStreamData()">
+    <option value="">-- Select Stream --</option>
+    <option value="CSE">Computer Science & Engineering</option>
+    <option value="ECE">Electronics & Communication</option>
+    <option value="EE">Electrical Engineering</option>
+    <option value="ME">Mechanical Engineering</option>
+    <option value="IT">Information Technology</option>
+    <option value="AI">Artificial Intelligence and Machine Learning</option>
+  </select>
+</section>
+
+  <!-- SEMESTER SELECTION -->
+  <section class="card">
+    <h2 class="section-title">Semester Selection</h2>
+    <div id="semesterTabs" class="flex flex-wrap gap-2 mt-2"></div>
+  </section>
+
+  <!-- SUBJECT ENTRY -->
+  <section class="card">
+    <h2 class="section-title">Subjects & Labs</h2>
+
+    <!-- Desktop / Tablet Table -->
+    <table class="table hidden sm:table">
+      <thead>
+        <tr>
+          <th>Subject / Lab Name</th>
+          <th>Credits</th>
+          <th>Grade</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="subjects"></tbody>
+    </table>
+
+    <!-- Mobile Cards -->
+    <div id="mobileSubjects" class="space-y-3 sm:hidden"></div>
+
+    <div class="flex justify-between items-center mt-4 flex-wrap gap-2">
+      <button onclick="addSubject()" class="btn-primary">
+        + Add Subject / Lab
+      </button>
+      <span class="note">Enter all theory & lab subjects</span>
+    </div>
+  </section>
+
+  <!-- ACTION BUTTONS (DESKTOP) -->
+  <section class="card hidden sm:grid grid-cols-2 gap-4">
+    <button onclick="saveSemester()" class="btn-success">
+      Calculate & Save Semester
+    </button>
+    <button onclick="generatePDF()" class="btn-secondary">
+      Download Grade Card (PDF)
+    </button>
+  </section>
+
+  <!-- RESULT -->
+  <section class="card hidden" id="result">
+    <h2 class="section-title">Semester Result Summary</h2>
+
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 text-center">
+      <div class="stat">
+        <p>Total Credits</p>
+        <span id="totalCredits"></span>
+      </div>
+
+      <div class="stat">
+        <p>Credit Points</p>
+        <span id="totalPoints"></span>
+      </div>
+
+      <div class="stat highlight">
+        <p>SGPA</p>
+        <span id="sgpa"></span>
+      </div>
+
+      <div class="stat">
+        <p>Percentage</p>
+        <span id="percentage"></span>
+      </div>
+
+      <div class="stat highlight">
+        <p>CGPA</p>
+        <span id="cgpa"></span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- STICKY ACTION BAR (MOBILE) -->
+<div class="sticky-bar sm:hidden">
+  <button onclick="saveSemester()" class="btn-success w-1/2">
+    Save & Calculate
+  </button>
+  <button onclick="generatePDF()" class="btn-secondary w-1/2">
+    PDF
+  </button>
+</div>
+
+
+
+<footer class="footer">
+  Unofficial Academic Tool • Built for MAKAUT Students • Build By Puskar Nath • 
+
+<script src="script.js"></script>
+</body>
+</html>
